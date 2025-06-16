@@ -1,0 +1,61 @@
+efs:
+create 3 inst amazon,redhate 1b,ubuntu
+efs>create file sys-create-
+ec2>security grp-add nfs ,http,attach to in and out
+efs-manage-add nfs to all
+attach mount copy-(mount via ip)
+efs>go to created efs>network>attach > copy using nfc client comment
+1st instance amazon
+sudo su -
+    2  yum install nfs-utils -y
+    3  mkdir efs
+    4  sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport 172.31.32.188:/ efs
+    5  df -h
+    6  cd /root/efs
+    7  touch hi.txt{1..10}
+    8  ll
+2.redhat
+ 1  yum install nfs-utils -y
+    2  systemctl restart nfs-utils
+    3  systemctl enable nfs-utils
+    4  mkdir efs
+    5  sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport 172.31.32.188:/ efs
+    6  df -h
+    7  cd /root/efs
+    8  ll
+    9  history
+3.ubuntu
+t@ip-172-31-42-194:~/efs# history
+    1  apt-get update
+    2  apt install nfs-common
+    3  mkdir efs
+    4  sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport 172.31.32.188:/ efs
+    5  df -h
+    6  cd /root/efs
+    7  ll
+
+ebs:
+in n.v>ec2 inst
+vol-root , create data vol>attach
+connect inst to terminal:
+1  lsblk
+    2  mkfs.ext4 /dev/xvdb
+    3  mkdir /data
+    5  mount /dev/xvdb /data
+    6  df -h
+    7  cd /data
+    8  ll
+    9  touch pavi.txt{1..10}
+   10  ll
+data vol > create snapshot
+snapshot > copy - dest ohio
+in ohio > ec2 inst
+snashot availbe > create vol > attach
+connect tor ternminal:
+lsblk
+    2  mkdir /data-1
+    3  mount /dev/xvdb /data-1
+    4  df -h
+    5  cd /data-1
+    6  ll
+    7  history
