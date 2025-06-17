@@ -1,0 +1,73 @@
+hostname sethostname-dev.example.com
+   46  bash
+   47  yum install git -y
+   48  ssh-keygen
+   49  cd .ssh/
+   50  ll
+   51  cat id_rsa.pub
+   52  cd
+   53  mkdir /gitt/
+   54  cd /gitt/
+   55  git clone git@github.com:sanjayguruji/web-repo.git
+   56  ll
+   57  cd web-repo
+   58  ll
+   59  git branch -M main
+   60  git remote add origin git@github.com:Pavithra0802/git.git
+   61  git remote remove origin
+   62  git remote add origin git@github.com:Pavithra0802/git.git
+   63  git push -u origin main
+
+Jenkins:
+ 
+sudo su -
+hostnamectl set-hostname jenkins.example.com
+bash
+yum update –y
+wget -O /etc/yum.repos.d/jenkins.repo \
+https://pkg.jenkins.io/redhat-stable/jenkins.repo
+rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+yum upgrade
+yum install java-17-amazon-corretto -y
+yum install jenkins -y
+systemctl enable Jenkins
+systemctl start Jenkins
+systemctl status Jenkins
+yum install git -y
+yum install maven
+mvn -v  (copy the path for java and maven and paste it in Dashboard > manage Jenkins > tools > add java , maven )
+ 
+ 
+ip:8080 open this using public ip
+ 
+ 
+cat /var/lib/jenkins/secrets/initialAdminPassword   ( copy the key and paste it in Jenkins)
+( configure Jenkins)
+ 
+add the webhook (Jenkins > profile > security > add key (copy key) > go to git repo setting > add webhook > ip:8080/github-webhook/
+                                                                                                             json
+                                                                                                             paste key
+                                                                                                             add webhook
+ 
+Dashboard > manage plugin > available plugin > install maven, GitHub in, deployer
+copy the path for java and maven and paste it in Dashboard > manage Jenkins > tools > add java , maven
+ 
+new iteam > maven project > ok > paste git http link  and change /master to /main > save and apply
+ 
+Build now
+copy the cat path and paste it in the Jenkins cli as : cd /var/.......... (past the output)
+DOCUMENT THE OUTPUT
+hostname set-hostname jenkins.example.com
+    2  bash
+    3  wget -O /etc/yum.repos.d/jenkins.repo     https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    4  sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+    5  sudo yum upgrade
+    6  sudo yum install java-17-amazon-corretto -y
+    7  sudo yum install jenkins -y
+    8  sudo systemctl enable jenkins
+    9  sudo systemctl start jenkins
+   10  cat /var/lib/jenkins/secrets/initialAdminPassword
+   11  yum install maven
+   12  yum install git
+   13  yum install java
+   14  mvn -v
