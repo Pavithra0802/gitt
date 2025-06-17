@@ -1,0 +1,90 @@
+VPC WITH PEER CONNECTION
+ 
+REGION 1:
+Create a VPC 10.0.0.0/16
+Create IGW and attach with VPC
+ADD Subnet public :10.0.0.0/24
+            private : 10.0.1.0/25
+ADD Route Tables Public > connect with public subnet > edit routs and enable IGW
+                  private > connect with private subnet
+ 
+REGION 2:
+Create a VPC 20.0.0.0/16
+Create IGW and attach with VPC
+ADD Subnet public :20.0.0.0/24
+            private : 20.0.1.0/24
+ADD Route Tables Public > connect with public subnet > edit routs and enable IGW
+                  private > connect with private subnet
+ 
+
+CREATE PUBLIC AND PRIVATE INSTANCES...................................................
+Public --> my-vpc
+            public-subnet
+            public ip enable
+            SG - SSH, HTTP, ALL ICMP IPv4
+Private --> my-vpc
+            private-subnet
+            public ip disable
+            SG - SSH, HTTP, ALL ICMP IPv4
+ 
+ 
+INSTANCE 1 & 2 (public) :
+ 
+sudo su -
+passwd root
+yum install httpd -y
+systemctl restart httpd
+systemctl enable httpd
+vim /etc/ssh/sshd_config
+(enable permit root login, and first yes)
+systemctl restart sshd
+systemctl enable sshd
+
+ 
+[IF REQUIRED JUST DO:
+cd /var/www/html
+echo "This is my server" > index.html
+systemctl restart httpd
+(enable 8080 port and paste the public ip in web to see index.html  http://publicip:8080)]
+ 
+
+cat > hari.txt
+Hi
+(ctrl + d)-- to save
+scp hari.txt root@(opposite region public ip):/tmp
+ 
+TO CHECK WHETHER FILE IS TRANSFERED
+ 
+cd /tmp  (in other region)
+ll
+ 
+(file will be present)
+ 
+  
+ 
+PEER CONNECTION (DEDICATED ROUTE)---------------------------------------------------------------------------
+ 
+VPC (N.Virginia) > peer connections > peer name > zone: us-east-2 > select vpc > VPC_ID of Ohio > create peer connection.
+ 
+once added ACCEPT it in the Ohio vpc peering
+ 
+Then in both region route table > edit routes > select peer connection and CIDR vice versa 
+   N.Virginia : 20.0.0.0/16
+   Ohio : 10.0.0.0/16
+ 
+ 
+After that check ping connection :
+   N.V   : ping (private ip of public instance ohio )
+   Ohio  : ping (private ip of public instance N.V )
+ 
+ 
+cat > hari.txt
+Hi
+(ctrl + d)-- to save
+scp hari.txt root@(opposite region private ip):/tmp
+ 
+Use this and check whether data is transferred.
+ 
+cd /tmp  (in other region)
+ll
+ 
